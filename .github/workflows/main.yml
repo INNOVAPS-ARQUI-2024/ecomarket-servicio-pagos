@@ -1,12 +1,12 @@
-name: Build and Test on Develop
+name: Deploy to Production
 
 on:
   push:
     branches:
-      - develop
+      - main
 
 jobs:
-  build-and-test:
+  deploy-to-production:
     runs-on: ubuntu-latest
 
     steps:
@@ -28,11 +28,30 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: ${{ runner.os }}-gradle
 
+      - name: Grant execute permission for Gradlew
+        run: chmod +x ./gradlew
+
       - name: Build with Gradle
         run: ./gradlew clean build
 
-      - name: Run tests
-        run: ./gradlew test
-
       - name: Build Docker Image
-        run: docker build -t ecomarket-servicio-pagos:develop .
+        run: docker build -t ecomarket-servicio-pagos:prod .
+
+      - name: Save Docker Image to Tar File
+        run: docker save ecomarket-servicio-pagos:prod -o ecomarket-servicio-pagos-prod.tar
+
+      - name: Install sshpass
+        run: sudo apt-get update && sudo apt-get install -y sshpass
+
+      - name: Copy Docker Image to Production Server
+        run: |
+          sshpass -p "${{ secrets.PROD_SERVER_PASSWORD }}" scp -P ${{ secrets.PROD_SERVER_PORT }} -o StrictHostKeyChecking=no mi-aplicacion-prod.tar ${{ secrets.PROD_SERVER_USER }}@${{ secrets.PROD_SERVER_HOST }}:/tmp/mi-aplicacion-prod.tar
+
+      - name: Load Docker Image and Run Container on Production Server
+        run: |
+          sshpass -p "${{ secrets.PROD_SERVER_PASSWORD }}" ssh -p ${{ secrets.PROD_SERVER_PORT }} -o StrictHostKeyChecking=no ${{ secrets.PROD_SERVER_USER }}@${{ secrets.PROD_SERVER_HOST }} "
+          docker load -i /tmp/ecomarket-servicio-pagos-prod.tar &&
+          docker stop ecomarket-servicio-pagos-prod || true &&
+          docker rm ecomarket-servicio-pagos-prod || true &&
+          docker run -d --name ecomarket-servicio-pagos-prod -p 8080:8080 ecomarket-servicio-pagos:prod"
+          
