@@ -19,25 +19,25 @@ import com.example.ecomarket_servicio_pagos.service.PedidoService;
 
 
 @RestController
-@RequestMapping("/pago")
+@RequestMapping("/ecomarket-pagos")
 @CrossOrigin(origins = "http://localhost:4200")
 public class PedidoController {
 
     @Autowired
     private PedidoService pedidoService;
 
-    @GetMapping
+    @GetMapping("/pedidos")
     public List<Pedido> obtenerPedidos() {
         return pedidoService.obtenerPedidos();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("pedido/{id}")
     public ResponseEntity<Pedido> obtenerPedidoPorId(@PathVariable String id) {
         Pedido pedido = pedidoService.obtenerPedidoPorId(id);
         return pedido != null ? ResponseEntity.ok(pedido) : ResponseEntity.notFound().build();
     }
 
-    @PostMapping
+    @PostMapping("/pedido")
     public Pedido crearPedido(@RequestBody Pedido pedido) {
         return pedidoService.guardarPedido(pedido);
     }
