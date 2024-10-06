@@ -1,5 +1,6 @@
 package com.example.ecomarket_servicio_pagos;
 
+import com.example.ecomarket_servicio_pagos.service.PedidoService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
