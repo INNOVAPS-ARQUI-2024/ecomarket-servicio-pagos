@@ -30,7 +30,7 @@ public class PedidoControllerTest {
         // Arrange
         Mockito.when(pedidoService.obtenerPedidos()).thenReturn(TestUtils.mockPedidos());
         // Act
-        RequestBuilder request = MockMvcRequestBuilders.get("/ecomarket-pagos/pedido")
+        RequestBuilder request = MockMvcRequestBuilders.get("/ecomarket-pagos/pedidos")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON_UTF8);
 
@@ -66,5 +66,33 @@ public class PedidoControllerTest {
         // Act & Assert
         mockMvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void testGivenValidOrderIdWhenEliminarPedidoEndpointIsCalledThenReturnOK () throws Exception {
+        // Arrange
+        Mockito.when(pedidoService.eliminarPedido(eq("123"))).thenReturn(true);
+        // Act
+        RequestBuilder request = MockMvcRequestBuilders.delete("/ecomarket-pagos/pedido/123")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON_UTF8);
+
+
+        mockMvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
+    }
+
+    @Test
+    public void testGivenNonValidOrderIdWhenEliminarPedidoEndpointIsCalledThenReturnNotFound () throws Exception {
+        // Arrange
+        Mockito.when(pedidoService.eliminarPedido(eq("123"))).thenReturn(false);
+        // Act
+        RequestBuilder request = MockMvcRequestBuilders.delete("/ecomarket-pagos/pedido/123")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON_UTF8);
+
+
+        mockMvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 }

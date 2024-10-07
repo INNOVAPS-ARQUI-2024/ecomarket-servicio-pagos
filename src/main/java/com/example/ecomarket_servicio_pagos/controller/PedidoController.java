@@ -31,7 +31,7 @@ public class PedidoController {
         return pedidoService.obtenerPedidos();
     }
 
-    @GetMapping("pedido/{id}")
+    @GetMapping("/pedido/{id}")
     public ResponseEntity<Pedido> obtenerPedidoPorId(@PathVariable String id) {
         Pedido pedido = pedidoService.obtenerPedidoPorId(id);
         return pedido != null ? ResponseEntity.ok(pedido) : ResponseEntity.notFound().build();
@@ -48,7 +48,7 @@ public class PedidoController {
         return pedidoActualizado != null ? ResponseEntity.ok(pedidoActualizado) : ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/pedido/{id}")
     public ResponseEntity<Void> eliminarPedido(@PathVariable String id) {
         boolean fueEliminado = pedidoService.eliminarPedido(id);
         return fueEliminado ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();

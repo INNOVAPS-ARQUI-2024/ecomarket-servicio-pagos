@@ -19,8 +19,7 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @SpringBootApplication
 @ContextConfiguration(classes = Application.class)
@@ -90,4 +89,59 @@ public class PedidoServiceTest {
         verify(pedidoRepository, times(1)).save(any(Pedido.class));
 
     }
+
+    @Test
+    public void testGivenValidPedidoObjectWhenModificarPedidoIsCallThenReturnUpdatePedido(){
+        //Arrange
+        String pedidoID = "123";
+        Pedido pedidoExiste = TestUtils.mockPedido();
+        Pedido updatePedido = TestUtils.mockPedido();
+
+        Mockito.when(pedidoRepository.findById(eq(pedidoID))).thenReturn(Optional.ofNullable(pedidoExiste));
+        Mockito.when(pedidoRepository.save(any(Pedido.class))).thenReturn(updatePedido);
+
+        //Act
+        Pedido response = pedidoService.actualizarPedido(pedidoID, updatePedido);
+
+        //Assert
+        assertNotNull(response);
+        assertEquals(updatePedido.getOrderId(), response.getOrderId());
+        verify(pedidoRepository, times(1)).findById(eq(pedidoID));
+        verify(pedidoRepository, times(1)).save(any(Pedido.class));
+    }
+
+    @Test
+    public void testGivenNonValidPedidoObjectWhenModificarPedidoIsCallThenReturnNull(){
+        //Arrange
+        Pedido updatePedido = TestUtils.mockPedido();
+
+        Mockito.when(pedidoRepository.findById(eq("123"))).thenReturn(Optional.ofNullable(TestUtils.mockPedido()));
+
+        //Act
+        Pedido response = pedidoService.actualizarPedido("1234", updatePedido);
+
+        //Assert
+        assertNull(response);
+        verify(pedidoRepository, times(1)).findById(eq("1234"));
+        verify(pedidoRepository, never()).save(any(Pedido.class));
+
+    }
+
+    @Test
+    public void testGivenExistingPedidoWhenEliminarPedidoIsCallThenReturnTrue(){
+        //Arrange
+
+        Mockito.when(pedidoRepository.existsById(eq("123"))).thenReturn(true);
+        Mockito.doNothing().when(pedidoRepository).deleteById(eq("123"));
+
+        //Act
+        boolean response = pedidoService.eliminarPedido("123");
+
+        //Assert
+        assertTrue(response);
+        verify(pedidoRepository, times(1)).existsById(eq("123"));
+        verify(pedidoRepository, times(1)).deleteById(eq("123"));
+
+    }
+
 }
