@@ -42,7 +42,7 @@ public class PedidoController {
         return pedidoService.guardarPedido(pedido);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/pedido/{id}")
     public ResponseEntity<Pedido> actualizarPedido(@PathVariable String id, @RequestBody Pedido detallesPedido) {
         Pedido pedidoActualizado = pedidoService.actualizarPedido(id, detallesPedido);
         return pedidoActualizado != null ? ResponseEntity.ok(pedidoActualizado) : ResponseEntity.notFound().build();

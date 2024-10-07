@@ -31,12 +31,12 @@ public class TransaccionServiceTest {
     private TransaccionService transaccionService;
 
     @BeforeEach
-    public void setup(){
+    public void setup() {
         MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    public void testGivenRepositoryLoadedWithTransaccionesWhenObtenerTransaccionesIsCalledThenReturnAllTransacciones(){
+    public void testGivenRepositoryLoadedWithTransaccionesWhenObtenerTransaccionesIsCalledThenReturnAllTransacciones() {
         //Arrange
         Mockito.when(transaccionRepository.findAll()).thenReturn(TestUtils.mockTransacciones());
 
@@ -51,7 +51,7 @@ public class TransaccionServiceTest {
     }
 
     @Test
-    public void testGivenValidIDWhenObtenerTransaccionesporIDisCalledThenReturnTransaccion(){
+    public void testGivenValidIDWhenObtenerTransaccionesporIDisCalledThenReturnTransaccion() {
         //Arrange
         Mockito.when(transaccionRepository.findById("123")).thenReturn(Optional.ofNullable(TestUtils.mockTransaccion()));
 
@@ -60,7 +60,92 @@ public class TransaccionServiceTest {
 
         //Assert
         assertNotNull(response);
+        verify(transaccionRepository, times(1)).findById(eq("123"));
+        assertEquals("123", response.getTransactionId());
 
     }
+
+    @Test
+    public void testGivenNonValidIDWhenObtenerTransaccionesporIDisCalledThenReturnNull() {
+        //Arrange
+        Mockito.when(transaccionRepository.findById("123")).thenReturn(Optional.ofNullable(TestUtils.mockTransaccion()));
+
+        //Act
+        Transaccion response = transaccionService.obtenerTransaccionPorId("1234");
+
+        //Assert
+        assertNull(response);
+        verify(transaccionRepository, times(1)).findById(eq("1234"));
+    }
+
+    @Test
+    public void testGivenValidTransaccionObjectWhenGuardarTransaccionIsCallThenReturnTransaccion() {
+        //Arrange
+        Mockito.when(transaccionRepository.save(any(Transaccion.class))).thenReturn(TestUtils.mockTransaccion());
+
+        //Act
+        Transaccion response = transaccionService.guardarTransaccion(TestUtils.mockTransaccion());
+
+        //Assert
+        assertNotNull(response);
+        verify(transaccionRepository, times(1)).save(any(Transaccion.class));
+    }
+
+    @Test
+    public void testGivenValidTransaccionObjectWhenActualizarTransaccionIsCallThenReturnUpdateTransaccion() {
+        //Arrange
+        String transaccionID = "123";
+        Transaccion transaccionExist = TestUtils.mockTransaccion();
+        Transaccion updateTransaccion = TestUtils.mockTransaccion();
+
+        Mockito.when(transaccionRepository.findById(eq(transaccionID))).thenReturn(Optional.ofNullable(transaccionExist));
+        Mockito.when(transaccionRepository.save(any(Transaccion.class))).thenReturn(updateTransaccion);
+
+        //Act
+        Transaccion response = transaccionService.actualizarTransaccion(transaccionID, updateTransaccion);
+
+        //Assert
+        assertNotNull(response);
+        assertEquals(updateTransaccion.getTransactionId(), response.getTransactionId());
+        verify(transaccionRepository, times(1)).findById(eq(transaccionID));
+        verify(transaccionRepository, times(1)).save(any(Transaccion.class));
+
+    }
+
+    @Test
+    public void testGivenNonValidTransaccionObjectWhenActualizarTransaccionIsCallThenReturnNull() {
+        //Arrange
+        Transaccion updateTransaccion = TestUtils.mockTransaccion();
+
+        Mockito.when(transaccionRepository.findById(eq("123"))).thenReturn(Optional.ofNullable(TestUtils.mockTransaccion()));
+
+        //Act
+        Transaccion response = transaccionService.actualizarTransaccion("1234", updateTransaccion);
+
+        //Assert
+        assertNull(response);
+        verify(transaccionRepository, times(1)).findById(eq("1234"));
+        verify(transaccionRepository, never()).save(any(Transaccion.class));
+
+
+    }
+
+    @Test
+    public void tstGivenExistingTransaccionWhenEliminarTransaccionIsCallThenReturnTrue(){
+        //Arrange
+        Mockito.when(transaccionRepository.existsById(eq("123"))).thenReturn(true);
+
+        //Act
+        boolean response = transaccionService.eliminarTransaccion("123");
+
+        //Assert
+        assertTrue(response);
+        verify(transaccionRepository, times(1)).existsById(eq("123"));
+        verify(transaccionRepository, times(1)).deleteById("123");
+    }
+
+
+
+
 
 }

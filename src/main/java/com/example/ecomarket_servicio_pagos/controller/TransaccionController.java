@@ -18,19 +18,19 @@ import com.example.ecomarket_servicio_pagos.entity.Transaccion;
 import com.example.ecomarket_servicio_pagos.service.TransaccionService;
 
 @RestController
-@RequestMapping("/carrito")
+@RequestMapping("/ecomarket-carrito")
 @CrossOrigin(origins = "http://localhost:4200")
 public class TransaccionController {
 
     @Autowired
     private TransaccionService transaccionService;
 
-    @GetMapping
+    @GetMapping("/transacciones")
     public List<Transaccion> obtenerTransacciones() {
         return transaccionService.obtenerTransacciones();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/transaccion/{id}")
     public ResponseEntity<Transaccion> obtenerTransaccionPorId(@PathVariable String id) {
         Transaccion transaccion = transaccionService.obtenerTransaccionPorId(id);
         if (transaccion != null) {
@@ -40,12 +40,12 @@ public class TransaccionController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/transaccion")
     public Transaccion crearTransaccion(@RequestBody Transaccion transaccion) {
         return transaccionService.guardarTransaccion(transaccion);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/transaccion/{id}")
     public ResponseEntity<Transaccion> actualizarTransaccion(@PathVariable String id, @RequestBody Transaccion detallesTransaccion) {
         Transaccion transaccionActualizada = transaccionService.actualizarTransaccion(id, detallesTransaccion);
         if (transaccionActualizada != null) {
@@ -55,7 +55,7 @@ public class TransaccionController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/transaccion/{id}")
     public ResponseEntity<Void> eliminarTransaccion(@PathVariable String id) {
         boolean fueEliminado = transaccionService.eliminarTransaccion(id);
         if (fueEliminado) {

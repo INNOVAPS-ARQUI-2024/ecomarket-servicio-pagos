@@ -1,5 +1,6 @@
 package com.example.ecomarket_servicio_pagos.controller;
 
+import com.example.ecomarket_servicio_pagos.entity.Pedido;
 import com.example.ecomarket_servicio_pagos.service.PedidoService;
 import com.example.ecomarket_servicio_pagos.utils.TestUtils;
 import org.junit.jupiter.api.Test;
@@ -67,6 +68,42 @@ public class PedidoControllerTest {
         mockMvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
+
+    @Test
+    public void testGivenValidPedidoWhenPedidoIsPutThenReturnOk() throws Exception {
+        //Arrange
+        Mockito.when(pedidoService.actualizarPedido(eq("123"), any(Pedido.class))).thenReturn(TestUtils.mockPedido());
+        String json = TestUtils.asJsonString(TestUtils.mockPedido());
+
+        //Act
+        RequestBuilder request = MockMvcRequestBuilders.put("/ecomarket-pagos/pedido/123")
+                .content(json)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON_UTF8);
+
+        //Act & Assert
+        mockMvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void testGivenNonValidPedidoWhenPedidoIsPutThenReturnNotFound() throws Exception {
+        //Arrange
+        Mockito.when(pedidoService.actualizarPedido(eq("123"), any(Pedido.class))).thenReturn(null);
+        String json = TestUtils.asJsonString(TestUtils.mockPedido());
+
+        //Act
+        RequestBuilder request = MockMvcRequestBuilders.put("/ecomarket-pagos/pedido/123")
+                .content(json)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON_UTF8);
+
+        //Act & Assert
+        mockMvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+
 
     @Test
     public void testGivenValidOrderIdWhenEliminarPedidoEndpointIsCalledThenReturnOK () throws Exception {

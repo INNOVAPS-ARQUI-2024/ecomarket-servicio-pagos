@@ -143,5 +143,4 @@ public class PedidoServiceTest {
         verify(pedidoRepository, times(1)).deleteById(eq("123"));
 
     }
-
 }
