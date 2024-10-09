@@ -23,61 +23,64 @@ public class DBInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        
+
         // Inicializar Pedidos
         if (pedidoRepository.count() == 0) {
-            Pedido pedido1 = new Pedido();
-            pedido1.setUserId("user1");
-            pedido1.setItems(Arrays.asList("prod1", "serv1"));
-            pedido1.setTotalAmount(100.50);
-            pedido1.setCurrency("USD");
-            pedido1.setStatus("PENDING");
-            pedido1.setPaymentMethodId("pm1");
-            pedido1.setCreatedAt(new Date());
-            pedido1.setUpdatedAt(new Date());
+            Pedido pedido1 = Pedido.builder()
+                    .userId("user1")
+                    .items(Arrays.asList("prod1", "serv1"))
+                    .totalAmount(100.50)
+                    .currency("USD")
+                    .status("PENDING")
+                    .paymentMethodId("pm1")
+                    .createdAt(new Date())
+                    .updatedAt(new Date())
+                    .build();
 
-            Pedido pedido2 = new Pedido();
-            pedido2.setUserId("user2");
-            pedido2.setItems(Arrays.asList("prod2", "serv2"));
-            pedido2.setTotalAmount(200.75);
-            pedido2.setCurrency("EUR");
-            pedido2.setStatus("COMPLETED");
-            pedido2.setPaymentMethodId("pm2");
-            pedido2.setCreatedAt(new Date());
-            pedido2.setUpdatedAt(new Date());
+            Pedido pedido2 = Pedido.builder()
+                    .userId("user2")
+                    .items(Arrays.asList("prod2", "serv2"))
+                    .totalAmount(200.75)
+                    .currency("EUR")
+                    .status("COMPLETED")
+                    .paymentMethodId("pm2")
+                    .createdAt(new Date())
+                    .updatedAt(new Date())
+                    .build();
 
             pedidoRepository.save(pedido1);
             pedidoRepository.save(pedido2);
         }
 
-
         // Inicializar Transacciones
         if (transaccionRepository.count() == 0) {
-            Transaccion transaccion1 = new Transaccion();
-            transaccion1.setBuyerId("user1");
-            transaccion1.setSellerId("user2");
-            transaccion1.setItemId("prod1");
-            transaccion1.setItemType("PRODUCT");
-            transaccion1.setAmount(100.50);
-            transaccion1.setCurrency("USD");
-            transaccion1.setStatus("PENDING");
-            transaccion1.setPaymentMethodId("pm1");
-            transaccion1.setDescription("Compra de prueba 1");
-            transaccion1.setCreatedAt(new Date());
-            transaccion1.setUpdatedAt(new Date());
+            Transaccion transaccion1 = Transaccion.builder()
+                    .buyerId("user1")
+                    .sellerId("user2")
+                    .itemId("prod1")
+                    .itemType("PRODUCT")
+                    .amount(100.50)
+                    .currency("USD")
+                    .status("PENDING")
+                    .paymentMethodId("pm1")
+                    .description("Compra de prueba 1")
+                    .createdAt(new Date())
+                    .updatedAt(new Date())
+                    .build();
 
-            Transaccion transaccion2 = new Transaccion();
-            transaccion2.setBuyerId("user2");
-            transaccion2.setSellerId("user1");
-            transaccion2.setItemId("serv2");
-            transaccion2.setItemType("SERVICE");
-            transaccion2.setAmount(150.75);
-            transaccion2.setCurrency("EUR");
-            transaccion2.setStatus("COMPLETED");
-            transaccion2.setPaymentMethodId("pm2");
-            transaccion2.setDescription("Compra de prueba 2");
-            transaccion2.setCreatedAt(new Date());
-            transaccion2.setUpdatedAt(new Date());
+            Transaccion transaccion2 = Transaccion.builder()
+                    .buyerId("user2")
+                    .sellerId("user1")
+                    .itemId("serv2")
+                    .itemType("SERVICE")
+                    .amount(150.75)
+                    .currency("EUR")
+                    .status("COMPLETED")
+                    .paymentMethodId("pm2")
+                    .description("Compra de prueba 2")
+                    .createdAt(new Date())
+                    .updatedAt(new Date())
+                    .build();
 
             transaccionRepository.save(transaccion1);
             transaccionRepository.save(transaccion2);
@@ -86,4 +89,3 @@ public class DBInitializer implements CommandLineRunner {
         System.out.println("Datos iniciales cargados en la base de datos.");
     }
 }
-
