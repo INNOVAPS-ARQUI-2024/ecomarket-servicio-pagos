@@ -43,8 +43,8 @@ public class CarritoService {
         Carrito carrito = carritoRepository.findByUserId(userId);
         if (carrito != null) {
             // Elimina el pedido cuyo orderId coincida
-            carrito.getPedidos().removeIf(pedido -> pedido.getOrderId().equals(orderId));
-            
+
+            carrito.getPedidos().removeIf(pedido -> orderId.equals(pedido.getOrderId()));
             // Recalcula el total del carrito
             double nuevoTotal = carrito.getPedidos().stream()
                                       .mapToDouble(Pedido::getTotalAmount)

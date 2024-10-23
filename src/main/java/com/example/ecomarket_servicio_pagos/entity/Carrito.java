@@ -1,5 +1,6 @@
 package com.example.ecomarket_servicio_pagos.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -20,6 +21,13 @@ public class Carrito {
     private double totalAmount; // Monto total del carrito
 
     public void agregarPedido(Pedido pedido) {
+        if (this.pedidos == null) {
+            this.pedidos = new ArrayList<>();
+        }
+        // Si la lista no es modificable, conviértela a una ArrayList
+        if (!(this.pedidos instanceof ArrayList)) {
+            this.pedidos = new ArrayList<>(this.pedidos);
+        }
         this.pedidos.add(pedido);
         this.totalAmount += pedido.getTotalAmount();
     }

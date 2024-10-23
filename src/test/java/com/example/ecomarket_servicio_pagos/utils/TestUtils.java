@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import com.example.ecomarket_servicio_pagos.entity.Carrito;
 import com.example.ecomarket_servicio_pagos.entity.Pedido;
 import com.example.ecomarket_servicio_pagos.entity.Transaccion;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -114,5 +115,22 @@ public class TestUtils {
 
         // Use ArrayList instead of Guava's Lists.newArrayList()
         return new ArrayList<>(Arrays.asList(transaccion1, transaccion2));
+    }
+
+    // Mocking un Carrito con pedidos
+    public static Carrito mockCarrito() {
+        //Reutilizamos el metodo que ya genera pedidos
+        List<Pedido> pedidos = mockPedidos();
+
+        // Calculamos el total del carrito
+        double totalAmount = pedidos.stream().mapToDouble(Pedido::getTotalAmount).sum();
+
+        // Creamos el carrito con los pedidos generados
+        return Carrito.builder()
+                .carritoId("carrito123")
+                .userId("user1")
+                .pedidos(pedidos)
+                .totalAmount(totalAmount)
+                .build();
     }
 }
