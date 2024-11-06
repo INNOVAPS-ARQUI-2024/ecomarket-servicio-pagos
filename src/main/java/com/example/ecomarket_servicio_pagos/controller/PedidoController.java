@@ -19,7 +19,7 @@ import com.example.ecomarket_servicio_pagos.service.PedidoService;
 
 
 @RestController
-@RequestMapping("/pago")
+@RequestMapping("api/pago")
 @CrossOrigin(origins = "http://localhost:4200")
 public class PedidoController {
 
