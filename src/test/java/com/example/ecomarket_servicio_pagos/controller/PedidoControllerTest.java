@@ -31,7 +31,7 @@ public class PedidoControllerTest {
         // Arrange
         Mockito.when(pedidoService.obtenerPedidos()).thenReturn(TestUtils.mockPedidos());
         // Act
-        RequestBuilder request = MockMvcRequestBuilders.get("/pago")
+        RequestBuilder request = MockMvcRequestBuilders.get("/api/pago")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON_UTF8);
 
@@ -44,7 +44,7 @@ public class PedidoControllerTest {
         // Arrange
         Mockito.when(pedidoService.obtenerPedidoPorId(eq("123"))).thenReturn(TestUtils.mockPedido());
         // Act
-        RequestBuilder request = MockMvcRequestBuilders.get("/pago/123")
+        RequestBuilder request = MockMvcRequestBuilders.get("/api/pago/123")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON_UTF8);
 
@@ -59,7 +59,7 @@ public class PedidoControllerTest {
         Mockito.when(pedidoService.guardarPedido(any())).thenReturn(TestUtils.mockPedido());
         String json = TestUtils.asJsonString(TestUtils.mockPedido());
         // Act
-        RequestBuilder request = MockMvcRequestBuilders.post("/pago")
+        RequestBuilder request = MockMvcRequestBuilders.post("/api/pago")
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON_UTF8);
@@ -76,7 +76,7 @@ public class PedidoControllerTest {
         String json = TestUtils.asJsonString(TestUtils.mockPedido());
 
         //Act
-        RequestBuilder request = MockMvcRequestBuilders.put("/pago/123")
+        RequestBuilder request = MockMvcRequestBuilders.put("/api/pago/123")
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON_UTF8);
@@ -93,7 +93,7 @@ public class PedidoControllerTest {
         String json = TestUtils.asJsonString(TestUtils.mockPedido());
 
         //Act
-        RequestBuilder request = MockMvcRequestBuilders.put("/pago/123")
+        RequestBuilder request = MockMvcRequestBuilders.put("/api/pago/123")
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON_UTF8);
@@ -110,7 +110,7 @@ public class PedidoControllerTest {
         // Arrange
         Mockito.when(pedidoService.eliminarPedido(eq("123"))).thenReturn(true);
         // Act
-        RequestBuilder request = MockMvcRequestBuilders.delete("/pago/123")
+        RequestBuilder request = MockMvcRequestBuilders.delete("/api/pago/123")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON_UTF8);
 
@@ -124,7 +124,7 @@ public class PedidoControllerTest {
         // Arrange
         Mockito.when(pedidoService.eliminarPedido(eq("123"))).thenReturn(false);
         // Act
-        RequestBuilder request = MockMvcRequestBuilders.delete("/pago/123")
+        RequestBuilder request = MockMvcRequestBuilders.delete("/api/pago/123")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON_UTF8);
 
