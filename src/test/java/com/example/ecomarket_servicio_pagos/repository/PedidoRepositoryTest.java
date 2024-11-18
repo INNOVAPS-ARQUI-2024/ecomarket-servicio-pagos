@@ -29,10 +29,10 @@ public class PedidoRepositoryTest {
     @Test
     public void testGivenValidOrderIDWhenFindByIDisCalledThenReturnPedidoEntity(){
         //Act
-        Optional<Pedido> pedido = pedidoRepository.findById("12345");
+        Optional<Pedido> pedido = pedidoRepository.findById("123");
 
         //Assert
         assertTrue(pedido.isPresent());
-        assertEquals("12345", pedido.get().getOrderId());
+        assertEquals("123", pedido.get().getOrderId());
     }
 }
