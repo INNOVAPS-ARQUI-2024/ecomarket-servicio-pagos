@@ -48,4 +48,16 @@ public class TransaccionService {
             return false;
         }
     }
+    public List<Transaccion> obtenerArticulosEnCarrito() {
+        return transaccionRepository.findByStatus("IN_CART");
+    }
+    // Vaciar el carrito
+    public boolean vaciarCarrito() {
+        List<Transaccion> transaccionesEnCarrito = transaccionRepository.findByStatus("IN_CART");
+        if (!transaccionesEnCarrito.isEmpty()) {
+            transaccionRepository.deleteAll(transaccionesEnCarrito);
+            return true;
+        }
+        return false;
+    }
 }

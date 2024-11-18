@@ -64,4 +64,49 @@ public class TransaccionController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping
+    public List<Transaccion> obtenerArticulosCarrito() {
+        return transaccionService.obtenerArticulosEnCarrito();
+    }
+
+    // Agregar un artículo al carrito
+    @PostMapping("/agregar")
+    public Transaccion agregarArticuloAlCarrito(@RequestBody Transaccion transaccion) {
+        transaccion.setStatus("IN_CART");
+        return transaccionService.guardarTransaccion(transaccion);
+    }
+
+    // Actualizar la cantidad de un artículo en el carrito
+    @PutMapping("/actualizar/{id}")
+    public ResponseEntity<Transaccion> actualizarArticuloEnCarrito(@PathVariable String id, @RequestBody Transaccion detallesTransaccion) {
+        Transaccion transaccionActualizada = transaccionService.actualizarTransaccion(id, detallesTransaccion);
+        if (transaccionActualizada != null) {
+            return ResponseEntity.ok(transaccionActualizada);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    // Eliminar un artículo específico del carrito
+    @DeleteMapping("/eliminar/{id}")
+    public ResponseEntity<Void> eliminarArticuloDelCarrito(@PathVariable String id) {
+        boolean fueEliminado = transaccionService.eliminarTransaccion(id);
+        if (fueEliminado) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    // Vaciar todo el carrito
+    @DeleteMapping("/vaciar")
+    public ResponseEntity<Void> vaciarCarrito() {
+        boolean fueVaciado = transaccionService.vaciarCarrito();
+        if (fueVaciado) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.status(500).build();
+        }
+    }
 }
